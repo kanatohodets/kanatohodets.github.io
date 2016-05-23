@@ -13,7 +13,7 @@ VM languages, Elixir included.
 
 The organizers did an excellent job. Both sides of my experience (attendee,
 speaker) were wonderful. So, ElixirConfEU organizers: thank you
-for a fantastic time! 
+for a fantastic time!
 
 My only disappointment is that I didn't manage my goal of connecting with
 a wider range of people: attending with a cohort of $work colleagues makes it
@@ -30,7 +30,7 @@ For folks who don't know, Erlang VM languages primarily orchestrate programs
 using message passing -- similar to remote procedure calls (RPC) on other
 platforms, but between different pieces of code on the same host. The amazing
 bit is that by writing our code using RPC _locally_, we can transform our
-program to run in a _distributed_ way with minimal adjustment. 
+program to run in a _distributed_ way with minimal adjustment.
 
 _Woah!_
 
@@ -67,7 +67,7 @@ with lots of computers in multiple data centers, and I can't use this!
 
 The basic arrangement in a distributed Erlang cluster is a full-mesh network;
 every node connected to every other. As a result, cluster sizes are typically
-limited to somewhere between 50-100: in this area (depending on hardware,
+limited to somewhere around 50: in this area (depending on hardware,
 network, user code, and so on) the number of messages being sent through the
 cluster just to keep it functioning starts to overwhelm a node's ability to do
 real work. In other words, heartbeats start contesting with RPCs for
@@ -97,12 +97,20 @@ distributed hash table to discover other cluster members
 #### Kademlia?
 
 I couldn't quite keep up with Zandra's description of the algorithm, but my
-basic understanding is that the overall structure is a trie-ish binary prefix
-tree, where the prefixes are pieces of the binary representation of the node's
-numeric ID, and nodes are the leaves. By having each node maintain a small list
-of specially selected peers throughout the tree structure (every node has at
-least one peer in each sub-tree), you can do some XOR magic to
-figure out how to contact any other member of the cluster in `O(log(n))` steps. 
+basic understanding is:
+
+* Nodes are arranged into a trie-ish binary prefix tree, where the prefixes are pieces of the binary representation of the node's
+numeric ID, and nodes are the leaves.
+
+* Each node maintains a small list of specially selected peers throughout the
+	tree structure: each node has at least one peer in each sub-tree.
+
+* When looking up another cluster member to send a message, you can do some XOR
+	magic to figure out who to contact to get you closer to your goal
+	recipient.
+
+* The process of finding another cluster member will happen in `O(log(n))`
+	steps.
 
 `O(log(n))` is (of course) slower than the `O(1)` lookup in a fully connected
 mesh, _but_ it means that we don't pay the price of a quadratically-growing
@@ -118,15 +126,18 @@ other end) nodes is inactive, it will close it: this preserves the sparse
 connection topology, and avoids the massive flood of heartbeats you get with
 a full mesh network.
 
-#### Why is this neat? 
+#### Why is this neat?
 
-I'm excited about this because it might allow the basic Erlang VM tools to grow
-into bigger systems (or different hardware profiles: consider a cluster of
-$hundreds of tiny VMs rather than $dozens of 128gb/24 core physical servers)
-without taking special architectural steps to deal with the overhead of
-maintaining the cluster. Zandra mentioned that she's been testing with clusters
-of ~350 nodes, but that the approach should be able to grow to much larger
-clusters than that. Cool!
+Remember the ~50 node limit on distributed Erlang? Well, this work
+addresses one of the main culprits: the fully connected mesh.
+
+If nodes are no longer arranged in a full mesh, we might be able to have Erlang
+clusters that look very different: consider a cluster of $hundreds of tiny VMs
+rather than $dozens of 128gb/24 core physical servers.
+
+How many nodes are we talking about? Well, Zandra mentioned that she's been
+testing with clusters of ~350 nodes, but that the approach should be able to
+grow to much larger clusters than that. Cool!
 
 #### Is there a catch?
 
