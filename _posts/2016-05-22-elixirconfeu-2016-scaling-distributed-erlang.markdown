@@ -59,7 +59,7 @@ with lots of computers in multiple data centers, and I can't use this!
 -- __acceptance__: ok, it isn't magic, but it _does_ provide a powerful building
 	block for real systems: small-ish Erlang clusters as independent components
 	in the architecture, where communication between clusters is handled like
-	any other platform (RPC, protobuf, JSON API, etc.).  WhatsApp knows a thing
+	any other platform (RPC, protobuf/JSON over some HTTP API, etc.).  WhatsApp knows a thing
 	or two about scaling, after all...
 
 4. After "Scaling Distributed Erlang" -- __hope__
