@@ -24,26 +24,27 @@ As an added bonus, evening strolls on the tarmac at Tempelhof were _great_.
 
 # Talks I loved, part one: [Scaling Distributed Erlang](http://www.elixirconf.eu/elixirconf2016/zandra-norman)
 
-#### Preface: Distributed Erlang
+#### Preface: What is distributed Erlang?
 
-For folks who don't know, Erlang VM languages primarily orchestrate programs
-using message passing -- similar to remote procedure calls (RPC) on other
-platforms, but between different pieces of code on the same host. The amazing
-bit is that by writing our code using RPC _locally_, we can transform our
-program to run in a _distributed_ way with minimal adjustment.
+For people who aren't as familiar with this part of the Erlang VM: languages on
+this platform primarily orchestrate programs using message passing -- similar
+to remote procedure calls (RPC) on other platforms, but between different
+pieces of code on the same host. The amazing bit is that by writing our code
+using RPC _locally_, we can transform our program to run in a _distributed_ way
+with minimal adjustment.
 
 _Woah!_
 
-Not woah-ing? Just think about rewriting your Perl/Python/Ruby/etc. app to split
-functionality (or have redundancy) across two servers, and you'll have an idea
-of how neat this is. No futzing with sockets, no central coordinator like
-ZooKeeper to potentially fail: just send a message.
+Not woah-ing? Just think about rewriting your Perl/Python/Ruby/etc. app to
+split functionality (or have redundancy) across two or more servers, and you'll
+have an idea of how neat this is. No futzing with sockets, no central
+coordinator like ZooKeeper/Redis/$database_of_choice to potentially fail: just
+send a message.
 
 What follows is my personal narrative arc on learning about the Erlang VM's
-distribution capabilities. As a quick language note, when talking
-about sending messages between different Erlang VMs (usually on different
-computers), we usually call each VM a 'node' -- this is because 'server' is
-overloaded in the Erlang world.
+distribution capabilities. As a quick language note, when talking about sending
+messages between different Erlang VMs (usually on different computers), we call
+each VM a 'node' -- this is because 'server' is overloaded in the Erlang world.
 
 1. Initial discovery -- __wild enthusiasm__: this tool-set has incredible support for distributed
 systems! The sky is the limit!
